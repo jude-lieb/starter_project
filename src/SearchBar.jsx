@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function SearchBar({ onResults }) {
   const [query, setQuery] = useState("");
@@ -8,18 +9,21 @@ export default function SearchBar({ onResults }) {
     const data = await res.json();
 
     console.log("Search results:", data);
-
-    onResults(data); // This triggers App to update results
+    onResults(data);
   }
 
   return (
-    <div>
-      <input 
+    <div className="input-group mb-3">
+      <input
+        type="text"
+        className="form-control"
         value={query}
-        onChange={e => setQuery(e.target.value)}
+        onChange={(e) => setQuery(e.target.value)}
         placeholder="Search player..."
       />
-      <button onClick={handleSearch}>Search</button>
+      <button className="btn btn-primary" onClick={handleSearch}>
+        Search
+      </button>
     </div>
   );
 }

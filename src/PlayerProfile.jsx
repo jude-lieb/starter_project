@@ -16,7 +16,7 @@ export default function PlayerProfile({ pdga, onPin, onUnpin, isPinned }) {
     <div className="card mt-3 shadow-sm">
       <div className="card-body">
         <div className="d-flex justify-content-between align-items-start mb-3">
-          <h2 className="card-title mb-0">{profile.name}</h2>
+          <h2 className="card-title mb-0">{profile.name} #{profile.pdga}</h2>
           {!isPinned ? (
             <button
               className="btn btn-outline-primary"
@@ -35,7 +35,7 @@ export default function PlayerProfile({ pdga, onPin, onUnpin, isPinned }) {
         </div>
 
         <ul className="list-group list-group-flush mb-3">
-          <li className="list-group-item"><strong>Rating:</strong> {profile.rating}</li>
+          <li className="list-group-item"><strong>Rating:</strong> {profile.rating || "Rating inactive"}</li>
           <li className="list-group-item"><strong>Location:</strong> {profile.location}</li>
           <li className="list-group-item"><strong>Classification:</strong> {profile.classification}</li>
           <li className="list-group-item"><strong>Membership:</strong> {profile.membershipStatus}</li>

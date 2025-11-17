@@ -54,8 +54,8 @@ export default function App() {
       <div className="row">
         
         {/* Left Column: Search + Results */}
-        <div className="col-md-4">
-          <h2 className="mb-4">PDGA Player Lookup</h2>
+        <div className="col-md-4 col-lg-4">
+          <h2 className="mb-4 text-center">PDGA Player Search</h2>
           <SearchBar onResults={handleSearchResults} />
           <PlayerResults
             results={results}
@@ -64,8 +64,8 @@ export default function App() {
         </div>
 
         {/* Middle Column: Profile */}
-        <div className="col-md-4">
-          <h2 className="mb-4">Player Profile</h2>
+        <div className="col-md-5 col-lg-5">
+          <h2 className="mb-4 text-center">Player Profile</h2>
           {selected && (
             <div>
               <PlayerProfile
@@ -83,14 +83,15 @@ export default function App() {
         </div>
 
         {/* Right Column: Pinned Players */}
-        <div className="col-md-4">
-          <h2>Pinned Players</h2>
+        <div className="col-md-3 col-lg-3">
+          <h2 className="text-center">Pinned Players</h2>
+          {pinned.length === 0 ? (
+              <div></div>
+          ) : (
           <div className="card shadow-sm">
             <div className="card-body">
               
-              {pinned.length === 0 ? (
-                <div><p>No pinned players yet.</p></div>
-              ) : (
+              
                 <div className="list-group list-group-flush">
                   {pinned.map((p) => (
                     <div
@@ -112,10 +113,11 @@ export default function App() {
                     </div>
                   ))}
                 </div>
-              )}
+              
 
             </div>
           </div>
+          )}
         </div>
       </div>
     </div>

@@ -1,26 +1,29 @@
 import { useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function SearchBar({ onResults }) {
   const [query, setQuery] = useState("");
 
   async function handleSearch() {
-    console.log("Searching for:", query);
-    
     const res = await fetch(`http://localhost:5000/api/search?query=${query}`);
     const data = await res.json();
 
-    console.log("Results:", data);
+    console.log("Search results:", data);
     onResults(data);
   }
 
   return (
-    <div style={{ marginBottom: 20 }}>
+    <div className="input-group mb-3">
       <input
-        placeholder="Search PDGA player…"
+        type="text"
+        className="form-control"
         value={query}
-        onChange={e => setQuery(e.target.value)}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search player..."
       />
-      <button onClick={handleSearch}>Search</button>
+      <button className="btn btn-primary" onClick={handleSearch}>
+        Search
+      </button>
     </div>
   );
 }

@@ -25,6 +25,10 @@ export async function scrapeProfile(pdga) {
   // --- Career events ---
   const careerEvents = $("li.career-events").text().replace("Career Events:", "").trim();
 
+  const image = $(".pane-player-photo-player-photo-pane img").attr("src");
+
+
+
   return {
     name,
     pdga,
@@ -34,6 +38,7 @@ export async function scrapeProfile(pdga) {
     membershipStatus,
     officialStatus,
     rating,
-    careerEvents
+    careerEvents,
+    image
   };
 }

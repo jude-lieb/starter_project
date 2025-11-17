@@ -1,19 +1,25 @@
 import { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function SearchBar({ onResults }) {
   const [query, setQuery] = useState("");
 
-  async function handleSearch() {
-    const res = await fetch(`http://localhost:5000/api/search?query=${query}`);
-    const data = await res.json();
+  async function performSearch() {
+    if (!query.trim()) return;
 
-    console.log("Search results:", data);
+    const res = await fetch(
+      `http://localhost:5000/api/search?query=${encodeURIComponent(query)}`
+    );
+    const data = await res.json();
     onResults(data);
   }
 
+  function handleSubmit(event) {
+    event.preventDefault();
+    performSearch();
+  }
+
   return (
-    <div className="input-group mb-3">
+    <form className="input-group mb-3" onSubmit={handleSubmit}>
       <input
         type="text"
         className="form-control"
@@ -21,9 +27,9 @@ export default function SearchBar({ onResults }) {
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search player..."
       />
-      <button className="btn btn-primary" onClick={handleSearch}>
+      <button className="btn btn-primary" type="submit">
         Search
       </button>
-    </div>
+    </form>
   );
 }

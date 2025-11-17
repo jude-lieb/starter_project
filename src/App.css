@@ -36,3 +36,21 @@
     transform: rotate(360deg);
   }
 }
+
+.results-scroll {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.results-scroll .list-group-item {
+  border-left: none;
+  border-right: none;
+}
+
+.results-scroll .list-group-item:first-child {
+  border-top: none;
+}
+
+.results-scroll .list-group-item:last-child {
+  border-bottom: none;
+}

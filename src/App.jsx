@@ -8,11 +8,16 @@ export default function App() {
   const [results, setResults] = useState([]);
   const [selected, setSelected] = useState(null);
 
+  function handleSearchResults(data) {
+    setSelected(null);   // <-- IMPORTANT
+    setResults(data);
+  }
+
   return (
     <div style={{ padding: 20 }}>
       <h1>PDGA Player Lookup</h1>
 
-      <SearchBar onResults={setResults} />
+      <SearchBar onResults={handleSearchResults} />
 
       {!selected && (
         <PlayerResults

@@ -18,6 +18,11 @@ export default function PlayerProfile({ pdga }) {
       <p><strong>Location:</strong> {profile.location}</p>
       <p><strong>Classification:</strong> {profile.classification}</p>
       <p><strong>Membership:</strong> {profile.membershipStatus}</p>
+      <img 
+        src={profile.image}
+        alt={`${profile.name}'s photo`}
+        style={{ width: 200, borderRadius: 10 }}
+      />
     </div>
   );
 }

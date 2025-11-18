@@ -6,7 +6,6 @@ export async function scrapeProfile(pdga) {
   const { data: html } = await axios.get(url);
   const $ = cheerio.load(html);
 
-  // --- Name ---
   const nameTitle = $("#page-title").text().trim(); // e.g. "Jude Lieb #213807"
   const name = nameTitle.replace(`#${pdga}`, "").trim();
 
@@ -17,17 +16,12 @@ export async function scrapeProfile(pdga) {
   const membershipStatus = $("li.membership-status").text().replace("Membership Status:", "").trim();
   const officialStatus = $("li.official").text().replace("Official Status:", "").trim();
 
-  // --- Rating ---
   let ratingText = $("li.current-rating").text().trim();
   const ratingMatch = ratingText.match(/Current Rating:\s*([0-9]+)/);
   const rating = ratingMatch ? ratingMatch[1] : null;
-
-  // --- Career events ---
   const careerEvents = $("li.career-events").text().replace("Career Events:", "").trim();
 
   const image = $(".pane-player-photo-player-photo-pane img").attr("src");
-
-
 
   return {
     name,

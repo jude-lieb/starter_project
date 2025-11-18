@@ -8,32 +8,118 @@ import "bootstrap/dist/css/bootstrap.min.css";
 export default function App() {
   const [results, setResults] = useState([]);
   const [selected, setSelected] = useState(null);
+  const [pinned, setPinned] = useState([]);
+
+  function getPdgaNumber(player) {
+    if (!player) return null;
+    const id =
+      player.pdgaNumber ??
+      player.pdga ??
+      player.pdgaId ??
+      player.id ??
+      player.number ??
+      null;
+    return id ? String(id) : null;
+  }
 
   function handleSearchResults(data) {
-    setSelected(null); // <-- IMPORTANT
     setResults(data);
+  }
+
+  function pinPlayer(player) {
+    const pdgaNumber = getPdgaNumber(player);
+    if (!pdgaNumber) return;
+
+    const normalizedPlayer = { ...player, pdgaNumber };
+
+    setPinned((prev) => {
+      if (prev.some((p) => String(p.pdgaNumber) === pdgaNumber)) {
+        return prev;
+      }
+      return [...prev, normalizedPlayer];
+    });
+  }
+
+  function unpinPlayer(pdgaNumber) {
+    const target = pdgaNumber ? String(pdgaNumber) : null;
+    if (!target) return;
+
+    setPinned((prev) => prev.filter((p) => String(p.pdgaNumber) !== target));
   }
 
   return (
     <div className="container py-4">
-      <h1 className="mb-4">PDGA Player Lookup</h1>
-
-      <div className="row">
+      <div className="row g-4">
         {/* Left Column: Search + Results */}
-        <div className="col-md-5">
-          <SearchBar onResults={handleSearchResults} />
-
-          {!selected && (
+        <div className="col-md-4 col-lg-4">
+          <div className="column-panel">
+            <h2 className="mb-4 text-center">PDGA Player Search</h2>
+            <SearchBar onResults={handleSearchResults} />
             <PlayerResults
               results={results}
               onSelect={(player) => setSelected(player)}
             />
-          )}
+          </div>
         </div>
 
-        {/* Right Column: Profile */}
-        <div className="col-md-7">
-          {selected && <PlayerProfile pdga={selected.pdgaNumber} />}
+        {/* Middle Column: Profile */}
+        <div className="col-md-5 col-lg-5">
+          <div className="column-panel">
+            <h2 className="mb-4 text-center">Player Profile</h2>
+            {selected ? (
+              <PlayerProfile
+                pdga={selected.pdgaNumber ?? selected.pdga}
+                onPin={pinPlayer}
+                onUnpin={unpinPlayer}
+                isPinned={pinned.some(
+                  (p) =>
+                    String(p.pdgaNumber) ===
+                    String(selected.pdgaNumber ?? selected.pdga)
+                )}
+              />
+            ) : (
+              <p className="text-muted text-center mb-0">
+                Select a player to view their profile.
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Right Column: Pinned Players */}
+        <div className="col-md-3 col-lg-3">
+          <div className="column-panel">
+            <h2 className="text-center">Pinned Players</h2>
+     
+            {pinned.length === 0 ? (
+              <p className="text-muted text-center mb-0 mt-4">
+                No pinned players yet.
+              </p>
+            ) : (
+              <div className="list-group list-group-flush">
+                {pinned.map((p) => (
+                  <div
+                    key={String(p.pdgaNumber)}
+                    className="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setSelected(p)}
+                  >
+                    <span>
+                      <strong>{p.name}</strong>
+                    </span>
+                    <button
+                      className="btn btn-sm btn-outline-danger ms-2"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        unpinPlayer(p.pdgaNumber);
+                      }}
+                    >
+                      Unpin
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

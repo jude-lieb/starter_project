@@ -49,25 +49,24 @@ export default function App() {
 
   return (
     <div className="container py-4">
-      
-
-      <div className="row">
-        
+      <div className="row g-4">
         {/* Left Column: Search + Results */}
         <div className="col-md-4 col-lg-4">
-          <h2 className="mb-4 text-center">PDGA Player Search</h2>
-          <SearchBar onResults={handleSearchResults} />
-          <PlayerResults
-            results={results}
-            onSelect={(player) => setSelected(player)}
-          />
+          <div className="column-panel">
+            <h2 className="mb-4 text-center">PDGA Player Search</h2>
+            <SearchBar onResults={handleSearchResults} />
+            <PlayerResults
+              results={results}
+              onSelect={(player) => setSelected(player)}
+            />
+          </div>
         </div>
 
         {/* Middle Column: Profile */}
         <div className="col-md-5 col-lg-5">
-          <h2 className="mb-4 text-center">Player Profile</h2>
-          {selected && (
-            <div>
+          <div className="column-panel">
+            <h2 className="mb-4 text-center">Player Profile</h2>
+            {selected ? (
               <PlayerProfile
                 pdga={selected.pdgaNumber ?? selected.pdga}
                 onPin={pinPlayer}
@@ -78,46 +77,49 @@ export default function App() {
                     String(selected.pdgaNumber ?? selected.pdga)
                 )}
               />
-            </div>
-          )}
+            ) : (
+              <p className="text-muted text-center mb-0">
+                Select a player to view their profile.
+              </p>
+            )}
+          </div>
         </div>
 
         {/* Right Column: Pinned Players */}
         <div className="col-md-3 col-lg-3">
-          <h2 className="text-center">Pinned Players</h2>
-          {pinned.length === 0 ? (
-              <div></div>
-          ) : (
-          <div className="card shadow-sm">
-            <div className="card-body">
-              
-              
-                <div className="list-group list-group-flush">
-                  {pinned.map((p) => (
-                    <div
-                      key={String(p.pdgaNumber)}
-                      className="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => setSelected(p)}
+          <div className="column-panel">
+            <h2 className="text-center">Pinned Players</h2>
+     
+            {pinned.length === 0 ? (
+              <p className="text-muted text-center mb-0 mt-4">
+                No pinned players yet.
+              </p>
+            ) : (
+              <div className="list-group list-group-flush">
+                {pinned.map((p) => (
+                  <div
+                    key={String(p.pdgaNumber)}
+                    className="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setSelected(p)}
+                  >
+                    <span>
+                      <strong>{p.name}</strong>
+                    </span>
+                    <button
+                      className="btn btn-sm btn-outline-danger ms-2"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        unpinPlayer(p.pdgaNumber);
+                      }}
                     >
-                      <span><strong>{p.name}</strong></span>
-                      <button
-                        className="btn btn-sm btn-outline-danger ms-2"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          unpinPlayer(p.pdgaNumber);
-                        }}
-                      >
-                        Unpin
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              
-
-            </div>
+                      Unpin
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
-          )}
         </div>
       </div>
     </div>
